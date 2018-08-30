@@ -1,0 +1,48 @@
+# Licensed Materials - Property of IBM
+# 5737-E67
+# @ Copyright IBM Corporation 2016, 2018 All Rights Reserved
+# US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+
+---
+
+- name: Checking if Cgroup Driver of docker is set to systemd
+  shell: docker info | awk '/^Cgroup Driver:/ {print $NF}'
+  args:
+    executable: /bin/bash
+  register: info
+  changed_when: false
+
+- name: Getting cgdriver flag
+  set_fact: cgdriver="{{ info.stdout }}"
+
+- name: Enabling Docker service
+  service: name=docker state=started enabled=yes
+
+- name: Adding cluster_CA_domain to /etc/hosts file
+  lineinfile:
+    dest: /etc/hosts
+    insertafter: EOF
+    state: present
+    line: '{{ cluster_internal_address }} {{ cluster_CA_domain }}'
+    regexp: '^.* {{ cluster_CA_domain }}$'
+    unsafe_writes: yes
+
+  when: cluster_internal_address | ipaddr
+
+- name: Ensuring that cert directory for the private docker registry exist
+  file: path=/etc/docker/certs.d/{{ cluster_CA_domain }}:8500 state=directory mode=0755
+
+- name: Ensuring that the image registry cacert file exist
+  copy: src={{ inventory_dir }}/cfc-certs/icp-router.crt dest=/etc/docker/certs.d/{{ cluster_CA_domain }}:8500/ca.crt force=yes
+
+- name: Ensuring that the /etc/cfc/pods directory exist
+  file: path=/etc/cfc/pods state=directory mode=0755
+
+- name: Ensuring that the /etc/cfc/conf directory exist
+  file: path=/etc/cfc/conf state=directory mode=0755
+# HKTODO: Put Azure into this format
+- name: Creating Cloud Provider config file
+  template: src={{ cloud_provider }}_cloud_conf.j2 dest={{ cloud_provider_conf }} mode=0644
+  when:
+    - inventory_hostname in master_nodes
+    - cloud_provider in ['vsphere']
