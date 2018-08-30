@@ -6,7 +6,7 @@
 ---
 
 # IBM Cloud Private version
-version: latest
+version: 2.1.0.3
 image_repo: ibmcom
 
 # Get nodes and number
@@ -133,7 +133,6 @@ calico:
     ipam_type: "{{ calico_ipam_type | default('calico-ipam') }}"
     ipam_subnet: "{{ calico_ipam_subnet | default('') }}"
     cluster_type: "{{ calico_cluster_type | default('k8s,bgp') }}"
-
   Node:
     Tolerations: ""
   Controller:
@@ -258,7 +257,6 @@ auth-idp:
     wlp_client_id: "{{ wlp_client_id }}"
     wlp_client_secret: "{{ wlp_client_secret }}"
     wlp_client_registration_secret: "{{ wlp_client_registration_secret }}"
-    install_type: "{{ install_type }}"
 
 auth-pap:
   auth_pap:
@@ -317,7 +315,7 @@ platform-api:
       kube_apiserver_secure_port: "{{ kube_apiserver_secure_port }}"
       cluster_name: "{{ cluster_name }}"
       cluster_internal_address: "{{ cluster_internal_address }}"
-      inception_image_name: "{{ image_repo }}/icp-inception:{{ version }}-ee"
+      inception_image_name: "{{ image_repo }}/icp-inception:{{ version }}"
       cluster_CA_domain: "{{ cluster_CA_domain }}"
       acct_name: "{{ cluster_name }} Account"
 
@@ -1255,7 +1253,7 @@ helm-repo:
 
 # Kubernetes images
 etcd_image: "{{ image_repo }}/etcd:v3.2.14"
-k8s_image: "{{ image_repo }}/hyperkube:v1.10.0-ee"
+k8s_image: "{{ image_repo }}/hyperkube:v1.10.0"
 k8s_pause_image: "{{ image_repo }}/pause:3.0"
 
 # Image manager images
