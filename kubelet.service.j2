@@ -23,9 +23,9 @@ ExecStart=/opt/kubernetes/hyperkube kubelet \
   --cluster-dns={{ cluster_dns }} \
   --cluster-domain={{ cluster_domain }} \
   --pod-infra-container-image={{ pause_image }} \
-  {% if cloud_provider != 'none' -%}
+  {% if ((cloud_provider != 'none') and (cloud_provider != 'azure')) -%}
   --cloud-provider={{ cloud_provider }} \
-  {% if ((inventory_hostname in groups['master']) or (cloud_provider == "azure")) -%}
+  {% if ((inventory_hostname in groups['master']) and (cloud_provider != 'azure')) -%}
   --cloud-config={{ cloud_provider_conf }} \
   {% endif -%}
   {% endif -%}
