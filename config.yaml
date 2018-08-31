@@ -1,0 +1,52 @@
+# Licensed Materials - Property of IBM
+# 5737-E67
+# @ Copyright IBM Corporation 2016, 2018 All Rights Reserved
+# US Government Users Restricted Rights - Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+
+---
+
+- name: Copying ca certificate files to /etc/cfc/conf directory
+  copy: src={{ inventory_dir }}/cfc-keys/{{ item }} dest=/etc/cfc/conf/{{ item }} mode=0644
+  with_items:
+    - ca.crt
+    - ca.key
+
+- name: Copying certificate files to /etc/cfc/conf directory
+  copy: src={{ inventory_dir }}/cfc-certs/{{ item }} dest=/etc/cfc/conf/{{ item }} mode=0644
+  with_items:
+    - server.cert
+    - server.key
+    - kubelet-client.crt
+    - kubelet-client.key
+    - kube-scheduler.crt
+    - kube-scheduler.key
+    - kube-controller-manager.crt
+    - kube-controller-manager.key
+    - ipsec-mesh.crt
+    - ipsec-mesh.key
+
+- name: Copying front-proxy certificate
+  copy: src={{ inventory_dir }}/cfc-certs/front dest=/etc/cfc/conf/
+
+- name: Copying front-proxy key
+  copy: src={{ inventory_dir }}/cfc-keys/front/front-proxy-ca-key.pem dest=/etc/cfc/conf/front/front-proxy-ca-key.pem mode=0644
+
+- name: Ensuring that Kubernetes configuration file for Kubernetes controller manager exist
+  template: src=conf/kube-controller-manager-config.yaml.j2 dest=/etc/cfc/conf/kube-controller-manager-config.yaml mode=0644
+
+- name: Ensuring that Kubernetes configuration file for Kubernetes scheduler exist
+  template: src=conf/kube-scheduler-config.yaml.j2 dest=/etc/cfc/conf/kube-scheduler-config.yaml mode=0644
+
+- name: Ensuring that Kubernetes policy configuration file for Kubernetes scheduler exist
+  template: src=conf/scheduler-policy-config.json.j2 dest=/etc/cfc/conf/scheduler-policy-config.json mode=0644
+
+- name: Ensuring that Kubernetes audit log policy file for Kubernetes apiserver exist
+  template: src=conf/audit-policy.yaml.j2 dest=/etc/cfc/conf/audit-policy.yaml mode=0644
+
+- name: Ensuring that pod spec of PV recycler exist
+  template: src=conf/recycler.yaml.j2 dest=/etc/cfc/conf/recycler.yaml mode=0644
+
+- name: Creating Cloud Provider config file for controller
+  template: src=conf/{{ cloud_provider }}_cloud_conf-controller.j2 dest={{ cloud_provider_conf }}-controller mode=0644
+  when:
+    - cloud_provider in ['azure']

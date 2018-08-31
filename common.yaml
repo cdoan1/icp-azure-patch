@@ -43,6 +43,5 @@
 # HKTODO: Put Azure into this format
 - name: Creating Cloud Provider config file
   template: src={{ cloud_provider }}_cloud_conf.j2 dest={{ cloud_provider_conf }} mode=0644
-  when:
-    - inventory_hostname in master_nodes
-    - cloud_provider in ['vsphere']
+  when: (inventory_hostname in master_nodes and cloud_provider in ['vsphere']) or
+        (cloud_provider in ['azure'])
