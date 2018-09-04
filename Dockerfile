@@ -1,4 +1,4 @@
-FROM ibmcom/icp-inception:2.1.0.3
+FROM ibmcom/icp-inception-amd64:latest-ee
 
 COPY calico-1.1.1.tgz /addon/calico/
 
