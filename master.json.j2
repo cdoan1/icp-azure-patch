@@ -20,7 +20,7 @@
           "controller-manager",
           "--master=https://127.0.0.1:{{ kube_apiserver_secure_port }}",
           "--service-account-private-key-file=/etc/cfc/conf/server.key",
-          "--feature-gates=TaintBasedEvictions=true",
+          "--feature-gates=TaintBasedEvictions=true,TaintNodesByCondition=true",
           "--root-ca-file=/etc/cfc/conf/ca.crt",
           "--min-resync-period=3m",
           "--cluster-cidr={{ network_cidr }}",
@@ -30,6 +30,8 @@
           "--kubeconfig=/etc/cfc/conf/kube-controller-manager-config.yaml",
           "--pv-recycler-pod-template-filepath-hostpath=/etc/cfc/conf/recycler.yaml",
           "--pv-recycler-pod-template-filepath-nfs=/etc/cfc/conf/recycler.yaml",
+          "--experimental-cluster-signing-duration=8760h0m0s",
+          "--controllers=*,tokencleaner",
           "--v=2",
           {% if kube_controller_manager_extra_args | length > 0 -%}
           {% for item in kube_controller_manager_extra_args -%}
@@ -41,6 +43,8 @@
           "--cloud-config={{ cloud_provider_conf }}{% if cloud_provider == 'azure' -%}-controller{% endif -%}",
           {% endif -%}
           "--leader-elect=true",
+          "--profiling=false",
+          "--terminated-pod-gc-threshold=5000",
           "--horizontal-pod-autoscaler-use-rest-clients=true"
         ],
         "volumeMounts": [
@@ -75,11 +79,13 @@
           "--etcd-certfile=/etc/cfc/conf/etcd/client.pem",
           "--etcd-keyfile=/etc/cfc/conf/etcd/client-key.pem",
           "--runtime-config=batch/v2alpha1,extensions/v1beta1=true,extensions/v1beta1/podsecuritypolicy=true,admissionregistration.k8s.io/v1alpha1",
-          "--admission-control=Initializers,NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,PodSecurityPolicy,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota",
+          "--enable-admission-plugins=Initializers,NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,PodSecurityPolicy,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota,Priority,EventRateLimit,PodNodeSelector,PodTolerationRestriction",
+          "--disable-admission-plugins=DefaultTolerationSeconds",
+          "--admission-control-config-file=/etc/cfc/conf/admission-control-config.yaml",
+          "--repair-malformed-updates=false",
           "--oidc-issuer-url=https://{{ cluster_CA_domain }}:9443/oidc/endpoint/OP",
           "--oidc-client-id={{ wlp_client_id }}",
           "--oidc-ca-file=/etc/cfc/conf/ca.crt",
-          "--feature-gates={% if auditlog_enabled == true %}AdvancedAuditing=true{% endif %}",
           "--oidc-groups-claim=teamRoleMappings",
           "--tls-cert-file=/etc/cfc/conf/server.cert",
           "--tls-private-key-file=/etc/cfc/conf/server.key",
@@ -99,9 +105,10 @@
           "--proxy-client-key-file=/etc/cfc/conf/front/front-proxy-client-key.pem",
           {% if auditlog_enabled == true -%}
           "--audit-policy-file=/etc/cfc/conf/audit-policy.yaml",
-          "--audit-log-path=-",
-          "--audit-log-format=legacy",
+          "--audit-log-path=/var/lib/icp/audit/audit.log",
+          "--audit-log-format=json",
           {% endif -%}
+          "--enable-bootstrap-token-auth",
           "--v=2",
           {% if kube_apiserver_extra_args | length > 0 -%}
           {% for item in kube_apiserver_extra_args -%}
@@ -118,6 +125,10 @@
           {
             "name": "data",
             "mountPath": "/etc/cfc/conf"
+          },
+          {
+            "name": "audit",
+            "mountPath": "/var/lib/icp/audit"
           }
         ]
       },
@@ -139,6 +150,7 @@
           "{{ item }}",
           {% endfor -%}
           {% endif -%}
+          "--profiling=false",
           "--leader-elect=true"
         ],
         "volumeMounts": [

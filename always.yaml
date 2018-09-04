@@ -25,12 +25,6 @@
   set_fact:
     kubernetes_apiserver_url: "https://{{ cluster_internal_address }}:{{ kube_apiserver_secure_port }}"
 
-- name: Getting Etcd info
-  set_fact:
-    cluster_etcd_url: "{% for node in etcd_nodes %}https://{{ node }}:4001{% if not loop.last %},{% endif %}{% endfor %}"
-    etcd_cluster_peers: "{% for node in etcd_nodes %}etcd{{ loop.index-1 }}=https://{{ node }}:2380{% if not loop.last %},{% endif %}{% endfor %}"
-    etcd_master_nodes: "{{ etcd_nodes | join(',') }}"
-
 - name: Setting cloud provider flags
   set_fact:
     cloud_provider_conf: "{% if cloud_provider in ['vsphere', 'azure'] %}/etc/cfc/conf/{{ cloud_provider }}_cloud_conf{% endif %}"
