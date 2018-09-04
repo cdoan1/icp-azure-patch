@@ -1217,7 +1217,7 @@ docker_password: placeholder
 
 # Network type [ calico, nsx-t ]
 network_type: calico
-network_helm_chart_path: "{{ (network_type == 'calico') | ternary('/addon/calico-99.99.99.tgz', '/addon/nsx-t-container-plugin-99.99.99.tgz') }}"
+network_helm_chart_path: "{{ (network_type == 'calico') | ternary('/addon/calico-1.1.1.tgz', '/addon/nsx-t-container-plugin-99.99.99.tgz') }}"
 
 # Network in IPv4 CIDR format
 network_cidr: 10.1.0.0/16
