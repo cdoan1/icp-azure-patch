@@ -6,7 +6,7 @@
 ---
 
 # IBM Cloud Private version
-version: latest
+version: 3.1.0
 
 # Image repo defination
 image_repo: "{% if install_on_openshift %}docker-registry.default.svc:5000{% else %}{{ cluster_CA_domain }}:8500{% endif %}/ibmcom"
@@ -62,122 +62,122 @@ infra_addon:
     path: "{{ network_helm_chart_path }}"
   kube-dns:
     namespace: kube-system
-    path: /addon/kube-dns-99.99.99.tgz
+    path: /addon/kube-dns-3.1.0.tgz
 
 # infra services that depends network and kube-dns
 infra2_addon:
   cert-manager:
     namespace: cert-manager
-    path: /addon/ibm-cert-manager-99.99.99.tgz
+    path: /addon/ibm-cert-manager-3.1.0.tgz
   nvidia-device-plugin:
     namespace: kube-system
-    path: /addon/nvidia-device-plugin-99.99.99.tgz
+    path: /addon/nvidia-device-plugin-3.1.0.tgz
   storage-glusterfs:
     use_custom_template: true
     namespace: kube-system
-    path: /addon/ibm-glusterfs-99.99.99.tgz
+    path: /addon/ibm-glusterfs-1.1.0.tgz
 
 # Phase 1 addons for common management services such as db
 phase1_addon:
   mongodb:
     namespace: kube-system
-    path: /addon/icp-mongodb-99.99.99.tgz
+    path: /addon/icp-mongodb-3.0.0.tgz
   mariadb:
     namespace: kube-system
-    path: /addon/mariadb-99.99.99.tgz
+    path: /addon/mariadb-3.1.0.tgz
   metrics-server:
     namespace: kube-system
-    path: /addon/metrics-server-99.99.99.tgz
+    path: /addon/metrics-server-3.1.0.tgz
   nginx-ingress:
     namespace: kube-system
-    path: /addon/nginx-ingress-99.99.99.tgz
+    path: /addon/nginx-ingress-3.1.0.tgz
   service-catalog:
     namespace: kube-system
-    path: /addon/service-catalog-99.99.99.tgz
+    path: /addon/service-catalog-3.1.0.tgz
   storage-minio:
     namespace: kube-system
-    path: /addon/ibm-minio-objectstore-99.99.99.tgz
+    path: /addon/ibm-minio-objectstore-1.6.0.tgz
   platform-api:
     namespace: kube-system
-    path: /addon/platform-api-99.99.99.tgz
+    path: /addon/platform-api-3.1.0.tgz
 
 # Phase 2 addons for authentication services
 phase2_addon:
   auth-idp:
     namespace: kube-system
-    path: /addon/auth-idp-99.99.99.tgz
+    path: /addon/auth-idp-3.1.0.tgz
   auth-apikeys:
     namespace: kube-system
-    path: /addon/auth-apikeys-99.99.99.tgz
+    path: /addon/auth-apikeys-3.1.0.tgz
   auth-pap:
     namespace: kube-system
-    path: /addon/auth-pap-99.99.99.tgz
+    path: /addon/auth-pap-3.1.0.tgz
   auth-pdp:
     namespace: kube-system
-    path: /addon/auth-pdp-99.99.99.tgz
+    path: /addon/auth-pdp-3.1.0.tgz
 
 #  Phase 3 addons for services rely on authentication services
 phase3_addon:
   icp-management-ingress:
     namespace: kube-system
-    path: /addon/icp-management-ingress-99.99.99.tgz
+    path: /addon/icp-management-ingress-3.1.0.tgz
 
 # Phase 4 addon
 phase4_addon:
   platform-ui:
     namespace: kube-system
-    path: /addon/platform-ui-99.99.99.tgz
+    path: /addon/platform-ui-3.1.0.tgz
   catalog-ui:
     namespace: kube-system
-    path: /addon/icp-catalog-chart-99.99.99.tgz
+    path: /addon/icp-catalog-chart-3.1.0.tgz
   security-onboarding:
     namespace: kube-system
-    path: /addon/security-onboarding-99.99.99.tgz
+    path: /addon/security-onboarding-3.1.0.tgz
   secret-watcher:
     namespace: kube-system
-    path: /addon/secret-watcher-99.99.99.tgz
+    path: /addon/secret-watcher-3.1.0.tgz
   heapster:
     namespace: kube-system
-    path: /addon/heapster-99.99.99.tgz
+    path: /addon/heapster-3.1.0.tgz
   unified-router:
     namespace: kube-system
-    path: /addon/unified-router-99.99.99.tgz
+    path: /addon/unified-router-3.1.0.tgz
   metering:
     namespace: kube-system
-    path: /addon/metering-99.99.99.tgz
+    path: /addon/metering-3.1.0.tgz
   monitoring:
     namespace: kube-system
-    path: /addon/ibm-icpmonitoring-99.99.99.tgz
+    path: /addon/ibm-icpmonitoring-1.2.0.tgz
   helm-repo:
     namespace: kube-system
-    path: /addon/helm-repo-99.99.99.tgz
+    path: /addon/helm-repo-3.1.0.tgz
   mgmt-repo:
     namespace: kube-system
-    path: /addon/mgmt-repo-99.99.99.tgz
+    path: /addon/mgmt-repo-3.1.0.tgz
   istio:
     namespace: istio-system
-    path: /addon/ibm-istio-99.99.99.tgz
+    path: /addon/ibm-istio-1.0.3.tgz
   helm-api:
     namespace: kube-system
-    path: /addon/helm-api-99.99.99.tgz
+    path: /addon/helm-api-3.1.0.tgz
   custom-metrics-adapter:
     namespace: kube-system
-    path: /addon/ibm-custom-metrics-adapter-99.99.99.tgz
+    path: /addon/ibm-custom-metrics-adapter-3.1.0.tgz
   logging:
     namespace: kube-system
-    path: /addon/ibm-icplogging-99.99.99.tgz
+    path: /addon/ibm-icplogging-2.0.0.tgz
   image-security-enforcement:
     namespace: kube-system
-    path: /addon/ibmcloud-image-enforcement-99.99.99.tgz
+    path: /addon/ibmcloud-image-enforcement-3.1.0.tgz
 
 # Phase 5 addon
 phase5_addon:
   audit-logging:
     namespace: kube-system
-    path: /addon/audit-logging-99.99.99.tgz
+    path: /addon/audit-logging-3.1.0.tgz
   vulnerability-advisor:
     namespace: kube-system
-    path: /addon/vulnerability-advisor-99.99.99.tgz
+    path: /addon/vulnerability-advisor-3.1.0.tgz
 
 # PPA Archive addons
 # addon:
@@ -1217,7 +1217,7 @@ docker_password: placeholder
 
 # Network type [ calico, nsx-t ]
 network_type: calico
-network_helm_chart_path: "{{ (network_type == 'calico') | ternary('/addon/calico-1.1.1.tgz', '/addon/nsx-t-container-plugin-99.99.99.tgz') }}"
+network_helm_chart_path: "/addon/calico-1.1.1.tgz"
 
 # Network in IPv4 CIDR format
 network_cidr: 10.1.0.0/16
@@ -1374,7 +1374,7 @@ va_minio_storage_dir: /var/lib/icp/va/minio
 kubelet_nodename: ip
 
 # Cloud provider configuration
-# Supported providers: ['vsphere', 'aws', 'azure']
+# Supported providers: ['vsphere', 'aws']
 cloud_provider: none
 
 # vSphere cloud provider configuration
@@ -1390,20 +1390,6 @@ cloud_provider: none
 #   datacenter: <datacenter name on which Node VMs are deployed>
 #   datastore: <default datastore to use for provisioning volumes>
 #   working_dir: <vCenter VM folder path in which node VMs are located>
-
-# AZURE cloud provider configuration
-# If user wants to configure Azure as cloud provider, azure_conf
-# parameters should be configured through config.yaml
-#
-# azure_conf:
-#   cluster_conf:
-#     key: value # goes here
-#   auth:
-#     key: value # common auth goes here
-#   kubelet_auth:
-#     key: value # kubelet auth goes here
-#   controller_auth:
-#     key: value # controller auth goes here
 
 # IPSec mesh Configuration
 # If user wants to configure IPSec mesh, the following parameters
