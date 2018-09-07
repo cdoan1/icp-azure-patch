@@ -2,7 +2,7 @@ FROM ibmcom/icp-inception-amd64:latest-ee
 
 COPY calico-1.1.1.tgz /addon/calico/
 
-COPY all.yaml playbook/group_vars/all.yaml
+RUN sed -i 's|^network_helm_chart_path:.*|network_helm_chart_path: "/addon/calico-1.1.1.tgz"|' /installer/playbook/group_vars/all.yaml
 COPY always.yaml playbook/roles/common/tasks/always.yaml
 COPY common.yaml playbook/roles/kubelet/tasks/common.yaml
 COPY azure_cloud_conf.j2 playbook/roles/kubelet/templates/azure_cloud_conf.j2
