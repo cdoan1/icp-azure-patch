@@ -11,3 +11,4 @@ COPY kubelet.service.j2 /installer/playbook/roles/kubelet/templates/kubelet.serv
 COPY config.yaml /installer/playbook/roles/master/tasks/config.yaml
 COPY azure_cloud_conf-controller.j2 /installer/playbook/roles/master/templates/conf/azure_cloud_conf-controller.j2
 COPY master.json.j2 /installer/playbook/roles/master/templates/pods/master.json.j2
+COPY tiller.yaml.j2 /installer/playbook/roles/tiller/templates/tiller.yaml.j2
