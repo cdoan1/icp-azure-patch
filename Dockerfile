@@ -14,9 +14,9 @@ COPY azure_cloud_conf-controller.j2 /installer/playbook/roles/master/templates/c
 #COPY master.json.j2 /installer/playbook/roles/master/templates/pods/master.json.j2
 # COPY tiller.yaml.j2 /installer/playbook/roles/tiller/templates/tiller.yaml.j2
 
-RUN patch /tmp/all.yaml.patch /installer/playbook/group_vars/all.yaml && \
-    patch /tmp/always.yaml.patch /installer/playbook/roles/common/tasks/always.yaml && \
-    patch /tmp/kubelet.service.j2.patch /installer/playbook/roles/kubelet/templates/kubelet.service.j2 && \
-    patch /tmp/config.yaml.patch /installer/playbook/roles/master/tasks/config.yaml && \
-    patch /tmp/master.json.j2.patch /installer/playbook/roles/master/templates/pods/master.json.j2 && \
-    patch /tmp/common.yaml.patch /installer/playbook/roles/kubelet/tasks/common.yaml 
+RUN patch  /installer/playbook/group_vars/all.yaml /tmp/all.yaml.patch && \
+    patch /installer/playbook/roles/common/tasks/always.yaml /tmp/always.yaml.patch && \
+    patch /installer/playbook/roles/kubelet/templates/kubelet.service.j2 /tmp/kubelet.service.j2.patch && \
+    patch /installer/playbook/roles/master/tasks/config.yaml /tmp/config.yaml.patch && \
+    patch /installer/playbook/roles/master/templates/pods/master.json.j2 /tmp/master.json.j2.patch && \
+    patch /installer/playbook/roles/kubelet/tasks/common.yaml /tmp/common.yaml.patch 
