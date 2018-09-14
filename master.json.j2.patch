@@ -1,11 +1,78 @@
 --- /installer/playbook/roles/master/templates/pods/master.json.j2
 +++ master.json.j2
-@@ -40,7 +40,7 @@
+@@ -39,8 +39,11 @@
+           {% endfor -%}
            {% endif -%}
            {% if cloud_provider != 'none' -%}
-           "--cloud-provider={{ cloud_provider }}",
+-          "--cloud-provider={{ cloud_provider }}",
 -          "--cloud-config={{ cloud_provider_conf }}",
-+          "--cloud-config={{ cloud_provider_conf }}{% if cloud_provider == 'azure' -%}-controller{% endif -%}",
++          "--cloud-provider={{  (cloud_provider in ['azure']) | ternary('external', cloud_provider) }}",
++          "--cloud-config={{  (cloud_provider in ['azure']) | ternary('', cloud_provider_conf) }}",
++          {% if cloud_provider in ['azure'] -%}
++          "--external-cloud-volume-plugin={{ cloud_provider }}",
++          {% endif -%}
            {% endif -%}
            "--leader-elect=true",
            "--profiling=false",
+@@ -62,6 +65,50 @@
+           }
+         ]
+       },
++      {% if cloud_provider in ['azure'] -%}
++      {
++        "name": "{{ cloud_provider }}-cloud-controller-manager",
++        "image": "{{ k8s_image }}",
++        "imagePullPolicy": "IfNotPresent",
++        "command": [
++          "/hyperkube",
++          "cloud-controller-manager",
++          "--master=https://127.0.0.1:{{ kube_apiserver_secure_port }}",
++          "--service-account-private-key-file=/etc/cfc/conf/server.key",
++
++          "--root-ca-file=/etc/cfc/conf/ca.crt",
++          "--min-resync-period=3m",
++          "--cluster-cidr={{ network_cidr }}",
++          "--cluster-signing-cert-file=/etc/cfc/conf/ca.crt",
++          "--cluster-signing-key-file=/etc/cfc/conf/ca.key",
++          "--use-service-account-credentials=true",
++          "--kubeconfig=/etc/cfc/conf/cloud-controller-manager-config.yaml",
++          "--v=2",
++          {% if cloud_controller_manager_extra_args | length > 0 -%}
++          {% for item in cloud_controller_manager_extra_args -%}
++          "{{ item }}",
++          {% endfor -%}
++          {% endif -%}
++          "--cloud-provider={{ cloud_provider }}",
++          "--cloud-config={{ cloud_provider_conf }}",
++          "--leader-elect=true"
++        ],
++        "volumeMounts": [
++          {
++            "name": "data",
++            "mountPath": "/etc/cfc/conf"
++          },
++          {
++            "name": "audit",
++            "mountPath": "/var/lib/icp/audit"
++          },
++          {
++            "name": "flexvolume-dir",
++            "mountPath": "/usr/libexec/kubernetes/kubelet-plugins/volume/exec"
++          }
++        ]
++      },
++      {% endif -%}
+       {
+         "name": "apiserver",
+         "image": "{{ k8s_image }}",
+@@ -115,8 +162,8 @@
+           {% endfor -%}
+           {% endif -%}
+           {% if cloud_provider != 'none' -%}
+-          "--cloud-provider={{ cloud_provider }}",
+-          "--cloud-config={{ cloud_provider_conf }}",
++          "--cloud-provider={{  (cloud_provider in ['azure']) | ternary('', cloud_provider) }}",
++          "--cloud-config={{  (cloud_provider in ['azure']) | ternary('', cloud_provider_conf) }}",
+           {% endif -%}
+           "--service-cluster-ip-range={{ service_cluster_ip_range }}"
+         ],

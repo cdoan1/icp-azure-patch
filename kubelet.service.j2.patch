@@ -1,11 +1,16 @@
 --- /installer/playbook/roles/kubelet/templates/kubelet.service.j2
 +++ kubelet.service.j2
-@@ -20,7 +20,7 @@
+@@ -18,10 +18,10 @@ ExecStart=/opt/kubernetes/hyperkube kubelet \
+   --hostname-override={{ kubelet_nodename | node_name(inventory_hostname, hostvars[inventory_hostname]['ansible_'~kubelet_nodename]) }} \
+   --node-ip={{ inventory_hostname }} \
    --pod-infra-container-image={{ pause_image }} \
-   {% if cloud_provider != 'none' -%}
-   --cloud-provider={{ cloud_provider }} \
--  {% if inventory_hostname in groups['master'] -%}
-+  {% if ((inventory_hostname in groups['master']) or (cloud_provider == "azure")) -%}
-   --cloud-config={{ cloud_provider_conf }} \
+-  {% if cloud_provider != 'none' -%}
+-  --cloud-provider={{ cloud_provider }} \
++  {% if cloud_provider != ('none') -%}
++  --cloud-provider={{ (cloud_provider in ['azure']) | ternary('external', cloud_provider) }} \
+   {% if inventory_hostname in groups['master'] -%}
+-  --cloud-config={{ cloud_provider_conf }} \
++  --cloud-config={{ (cloud_provider in ['azure']) | ternary('', cloud_provider_conf ) }} \
    {% endif -%}
    {% endif -%}
+   {% if inventory_hostname not in groups['worker'] -%}

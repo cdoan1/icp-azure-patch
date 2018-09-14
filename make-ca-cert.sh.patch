@@ -1,0 +1,21 @@
+--- /installer/playbook/roles/kubernetes-certs/files/make-ca-cert.sh
++++ make-ca-cert.sh
+@@ -114,6 +114,12 @@ fi
+   --req-cn=system:kube-controller-manager --req-org= \
+   --req-c= --req-st= --req-city= --req-email= --req-ou= \
+   build-client-full system:kube-controller-manager nopass > /dev/null 2>&1
++./easyrsa --dn-mode=org \
++  --days=36500 \
++  --req-cn=system:cloud-controller-manager --req-org= \
++  --req-c= --req-st= --req-city= --req-email= --req-ou= \
++  build-client-full system:cloud-controller-manager nopass > /dev/null 2>&1
++
+ cp -p pki/issued/kubecfg.crt "${cert_dir}/kubecfg.crt"
+ cp -p pki/private/kubecfg.key "${cert_dir}/kubecfg.key"
+ cp -p pki/issued/kubelet.crt "${cert_dir}/kubelet.crt"
+@@ -126,3 +132,5 @@ cp -p pki/issued/system:kube-scheduler.crt "${cert_dir}/kube-scheduler.crt"
+ cp -p pki/private/system:kube-scheduler.key "${cert_dir}/kube-scheduler.key"
+ cp -p pki/issued/system:kube-controller-manager.crt "${cert_dir}/kube-controller-manager.crt"
+ cp -p pki/private/system:kube-controller-manager.key "${cert_dir}/kube-controller-manager.key"
++cp -p pki/issued/system:cloud-controller-manager.crt "${cert_dir}/cloud-controller-manager.crt"
++cp -p pki/private/system:cloud-controller-manager.key "${cert_dir}/cloud-controller-manager.key"
