@@ -20,4 +20,4 @@ RUN patch  /installer/playbook/group_vars/all.yaml /tmp/all.yaml.patch && \
     patch /installer/playbook/roles/kubelet/templates/kubelet.service.j2 /tmp/kubelet.service.j2.patch && \
     patch /installer/playbook/roles/kubernetes-certs/files/make-ca-cert.sh /tmp/make-ca-cert.sh.patch && \
     patch /installer/playbook/roles/master/tasks/config.yaml /tmp/config.yaml.patch && \
-    patch /installer/playbook/roles/master/templates/pods/master.json.j2 /tmp/master.json.j2.patch && \
+    patch /installer/playbook/roles/master/templates/pods/master.json.j2 /tmp/master.json.j2.patch
