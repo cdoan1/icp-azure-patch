@@ -14,7 +14,7 @@
            {% endif -%}
            "--leader-elect=true",
            "--profiling=false",
-@@ -62,6 +65,50 @@
+@@ -62,6 +65,45 @@
            }
          ]
        },
@@ -27,13 +27,8 @@
 +          "/hyperkube",
 +          "cloud-controller-manager",
 +          "--master=https://127.0.0.1:{{ kube_apiserver_secure_port }}",
-+          "--service-account-private-key-file=/etc/cfc/conf/server.key",
-+
-+          "--root-ca-file=/etc/cfc/conf/ca.crt",
 +          "--min-resync-period=3m",
 +          "--cluster-cidr={{ network_cidr }}",
-+          "--cluster-signing-cert-file=/etc/cfc/conf/ca.crt",
-+          "--cluster-signing-key-file=/etc/cfc/conf/ca.key",
 +          "--use-service-account-credentials=true",
 +          "--kubeconfig=/etc/cfc/conf/cloud-controller-manager-config.yaml",
 +          "--v=2",
@@ -65,7 +60,7 @@
        {
          "name": "apiserver",
          "image": "{{ k8s_image }}",
-@@ -115,8 +162,8 @@
+@@ -115,8 +157,8 @@
            {% endfor -%}
            {% endif -%}
            {% if cloud_provider != 'none' -%}
