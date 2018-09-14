@@ -14,7 +14,7 @@ COPY cloud-controller-manager-config.yaml.j2 playbook/roles/master/templates/con
 #COPY config.yaml /installer/playbook/roles/master/tasks/config.yaml
 # COPY azure_cloud_conf-controller.j2 /installer/playbook/roles/master/templates/conf/azure_cloud_conf-controller.j2
 #COPY master.json.j2 /installer/playbook/roles/master/templates/pods/master.json.j2
-# COPY tiller.yaml.j2 /installer/playbook/roles/tiller/templates/tiller.yaml.j2
+COPY tiller.yaml.j2 /installer/playbook/roles/tiller/templates/tiller.yaml.j2
 
 RUN patch  /installer/playbook/group_vars/all.yaml /tmp/all.yaml.patch && \
     patch /installer/playbook/roles/common/tasks/always.yaml /tmp/always.yaml.patch && \

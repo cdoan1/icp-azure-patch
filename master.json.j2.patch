@@ -7,7 +7,7 @@
 -          "--cloud-provider={{ cloud_provider }}",
 -          "--cloud-config={{ cloud_provider_conf }}",
 +          "--cloud-provider={{  (cloud_provider in ['azure']) | ternary('external', cloud_provider) }}",
-+          "--cloud-config={{  (cloud_provider in ['azure']) | ternary('', cloud_provider_conf) }}",
++          "--cloud-config={{ cloud_provider_conf }}",
 +          {% if cloud_provider in ['azure'] -%}
 +          "--external-cloud-volume-plugin={{ cloud_provider }}",
 +          {% endif -%}
