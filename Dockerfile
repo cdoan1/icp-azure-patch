@@ -8,7 +8,9 @@ COPY *.patch /tmp/
 #COPY always.yaml /installer/playbook/roles/common/tasks/always.yaml
 #COPY common.yaml /installer/playbook/roles/kubelet/tasks/common.yaml
 COPY azure_cloud_conf.j2 /installer/playbook/roles/kubelet/templates/azure_cloud_conf.j2
+COPY cloud-controller-manager-config.yaml.j2 playbook/roles/master/templates/conf/cloud-controller-manager-config.yaml.j2
 #COPY kubelet.service.j2 /installer/playbook/roles/kubelet/templates/kubelet.service.j2
+
 #COPY config.yaml /installer/playbook/roles/master/tasks/config.yaml
 # COPY azure_cloud_conf-controller.j2 /installer/playbook/roles/master/templates/conf/azure_cloud_conf-controller.j2
 #COPY master.json.j2 /installer/playbook/roles/master/templates/pods/master.json.j2

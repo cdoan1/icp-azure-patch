@@ -7,15 +7,15 @@
 +    - cloud-controller-manager.crt
 +    - cloud-controller-manager.key
 +
- 
+
  - name: Creating front-proxy directory
    file: path=/etc/cfc/conf/front state=directory mode=0700
 @@ -41,6 +44,9 @@
  - name: Ensuring that Kubernetes configuration file for Kubernetes controller manager exist
    template: src=conf/kube-controller-manager-config.yaml.j2 dest=/etc/cfc/conf/kube-controller-manager-config.yaml mode=0600
- 
+
 +- name: Ensuring that Kubernetes configuration file for cloud controller manager exist
 +  template: src=conf/cloud-controller-manager-config.yaml.j2 dest=/etc/cfc/conf/cloud-controller-manager-config.yaml mode=0600
 +
  - name: Ensuring that Kubernetes configuration file for Kubernetes scheduler exist
-   template: src=conf/kube-scheduler-config.yaml.j2 dest=/etc/cfc/conf/kube-scheduler-config.yaml mode=0600 
+   template: src=conf/kube-scheduler-config.yaml.j2 dest=/etc/cfc/conf/kube-scheduler-config.yaml mode=0600
