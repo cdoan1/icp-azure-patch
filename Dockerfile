@@ -1,4 +1,4 @@
-FROM ibmcom/icp-inception-amd64:latest-ee
+FROM ibmcom/icp-inception:3.1.0
 
 COPY calico-1.1.1.tgz /addon/
 
@@ -19,4 +19,4 @@ RUN patch  /installer/playbook/group_vars/all.yaml /tmp/all.yaml.patch && \
     patch /installer/playbook/roles/kubelet/templates/kubelet.service.j2 /tmp/kubelet.service.j2.patch && \
     patch /installer/playbook/roles/master/tasks/config.yaml /tmp/config.yaml.patch && \
     patch /installer/playbook/roles/master/templates/pods/master.json.j2 /tmp/master.json.j2.patch && \
-    patch /installer/playbook/roles/kubelet/tasks/common.yaml /tmp/common.yaml.patch 
+    patch /installer/playbook/roles/kubelet/tasks/common.yaml /tmp/common.yaml.patch
